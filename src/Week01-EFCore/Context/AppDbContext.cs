@@ -12,6 +12,20 @@ namespace Week01_EFCore.Context
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Product> Products { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.Development.json"))
+                .Build();
+
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            optionsBuilder
+                .UseLazyLoadingProxies()
+                .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Category entity configuration

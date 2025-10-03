@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }
-        public ICollection<OrderItem>? OrderItems { get; set; }
+        public virtual ICollection<OrderItem>? OrderItems { get; set; }
     }
 }
