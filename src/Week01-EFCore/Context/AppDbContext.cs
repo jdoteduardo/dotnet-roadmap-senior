@@ -80,6 +80,9 @@ namespace Week01_EFCore.Context
                 // Many-to-one relationship between Product and Category
                 entity.HasOne(e => e.Category)
                       .WithMany(c => c.Products);
+
+                // Add index on Name property
+                entity.HasIndex(e => e.Name);
             });
         }
 

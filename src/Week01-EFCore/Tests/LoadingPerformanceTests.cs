@@ -57,7 +57,18 @@ namespace Week01_EFCore.Tests
             }
             
             stopwatchLazy.Stop();
-            
+
+            // Teste Index
+            var stopwatchIndex = new Stopwatch();
+            stopwatchIndex.Start();
+
+            var productIndex = _context
+                .Products
+                .Where(p => p.Name.Equals("Teste product 1"))
+                .ToList();
+
+            stopwatchIndex.Stop();
+
             Console.WriteLine("=== Resultados Lazy Loading ===");
             Console.WriteLine($"Tempo total: {stopwatchLazy.ElapsedMilliseconds}ms");
             Console.WriteLine($"Produtos carregados: {productsLazy.Count}");
@@ -68,6 +79,9 @@ namespace Week01_EFCore.Tests
             Console.WriteLine("\n=== Comparação ===");
             Console.WriteLine($"Eager Loading: {stopwatchEager.ElapsedMilliseconds}ms");
             Console.WriteLine($"Lazy Loading: {stopwatchLazy.ElapsedMilliseconds}ms");
+
+            Console.WriteLine("=== Resultado Index ===");
+            Console.WriteLine($"Tempo total: {stopwatchIndex.ElapsedMilliseconds}ms");
         }
     }
 }
