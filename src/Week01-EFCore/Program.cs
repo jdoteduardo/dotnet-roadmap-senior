@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Week01_EFCore.Context;
+using Week01_EFCore.Interfaces;
+using Week01_EFCore.Repository;
 using Week01_EFCore.Tests;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 var app = builder.Build();
 

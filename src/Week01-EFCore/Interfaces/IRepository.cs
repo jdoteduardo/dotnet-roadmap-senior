@@ -1,4 +1,4 @@
-﻿namespace Week01_EFCore.Repository
+﻿namespace Week01_EFCore.Interfaces
 {
     public interface IRepository<T> where T : class
     {

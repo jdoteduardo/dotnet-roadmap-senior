@@ -88,6 +88,26 @@ namespace Week01_EFCore.Migrations
                     b.HasIndex("Name");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1,
+                            CategoryId = 1,
+                            Name = "Estojo"
+                        },
+                        new
+                        {
+                            Id = -2,
+                            CategoryId = 1,
+                            Name = "Lápis"
+                        },
+                        new
+                        {
+                            Id = -3,
+                            CategoryId = 2,
+                            Name = "Tesoura"
+                        });
                 });
 
             modelBuilder.Entity("Week01_EFCore.Entities.OrderItem", b =>

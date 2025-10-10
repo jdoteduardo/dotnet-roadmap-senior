@@ -14,16 +14,19 @@ namespace Week01_EFCore.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.Development.json"))
-                .Build();
+            if (!optionsBuilder.IsConfigured) // Só configura se não estiver configurado
+            {
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.Development.json"))
+                    .Build();
 
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            optionsBuilder
-                .UseLazyLoadingProxies()
-                .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                optionsBuilder
+                    .UseLazyLoadingProxies()
+                    .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -83,6 +86,13 @@ namespace Week01_EFCore.Context
 
                 // Add index on Name property
                 entity.HasIndex(e => e.Name);
+
+                // Seed data for Products
+                //entity.HasData(
+                //    new Product { Id = -1, Name = "Estojo", CategoryId = 1 },
+                //    new Product { Id = -2, Name = "Lápis", CategoryId = 1 },
+                //    new Product { Id = -3, Name = "Tesoura", CategoryId = 2 }
+                //);
             });
         }
 
