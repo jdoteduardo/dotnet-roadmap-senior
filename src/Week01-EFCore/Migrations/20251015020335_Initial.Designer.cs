@@ -11,8 +11,8 @@ using Week01_EFCore.Context;
 namespace Week01_EFCore.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251004030147_AddProductNameIndex")]
-    partial class AddProductNameIndex
+    [Migration("20251015020335_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,9 +20,6 @@ namespace Week01_EFCore.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.0")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Week01_EFCore.Entities.Category", b =>
@@ -41,16 +38,51 @@ namespace Week01_EFCore.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Week01_EFCore.Entities.Coupon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CouponCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Coupons");
+                });
+
             modelBuilder.Entity("Week01_EFCore.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int?>("CouponId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CouponId");
 
                     b.ToTable("Orders");
                 });
@@ -61,6 +93,9 @@ namespace Week01_EFCore.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("ProductId", "OrderId");
@@ -79,10 +114,16 @@ namespace Week01_EFCore.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -91,6 +132,15 @@ namespace Week01_EFCore.Migrations
                     b.HasIndex("Name");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Week01_EFCore.Entities.Order", b =>
+                {
+                    b.HasOne("Week01_EFCore.Entities.Coupon", "Coupon")
+                        .WithMany("Orders")
+                        .HasForeignKey("CouponId");
+
+                    b.Navigation("Coupon");
                 });
 
             modelBuilder.Entity("Week01_EFCore.Entities.OrderItem", b =>
@@ -126,6 +176,11 @@ namespace Week01_EFCore.Migrations
             modelBuilder.Entity("Week01_EFCore.Entities.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Week01_EFCore.Entities.Coupon", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Week01_EFCore.Entities.Order", b =>
