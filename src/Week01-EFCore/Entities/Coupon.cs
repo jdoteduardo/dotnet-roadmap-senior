@@ -1,4 +1,6 @@
-﻿namespace Week01_EFCore.Entities
+﻿using Week01_EFCore.Enums;
+
+namespace Week01_EFCore.Entities
 {
     public class Coupon
     {
@@ -6,6 +8,7 @@
         public string CouponCode { get; set; }
         public decimal DiscountAmount { get; set; }
         public bool IsActive { get; set; }
+        public DiscountType DiscountType { get; set; }
         public ICollection<Order>? Orders { get; set; }
     }
 }

@@ -49,6 +49,11 @@ namespace Week01_EFCore.Migrations
                     b.Property<decimal>("DiscountAmount")
                         .HasColumnType("decimal(5,2)");
 
+                    b.Property<string>("DiscountType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 

@@ -1,7 +1,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using Week01_EFCore.Context;
+using Week01_EFCore.Entities;
+using Week01_EFCore.Factories;
 using Week01_EFCore.Interfaces;
 using Week01_EFCore.Repository;
+using Week01_EFCore.Repository.Decorators;
+using Week01_EFCore.Services;
+using Week01_EFCore.Services.Decorators;
+using Week01_EFCore.Strategies;
 using Week01_EFCore.Tests;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,8 +20,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>();
 
+builder.Services.AddTransient<IEntityFactory<Order>, OrderFactory>();
+builder.Services.AddTransient<IEntityFactory<Product>, ProductFactory>();
+builder.Services.AddTransient<IEntityFactory<Category>, CategoryFactory>();
+builder.Services.AddTransient<IEntityFactory<OrderItem>, OrderItemFactory>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IDiscountStrategy, FixedDiscountStrategy>();
+builder.Services.AddScoped<IDiscountStrategy, PercentageDiscountStrategy>();
+builder.Services.AddScoped<ILoggerService, LoggerService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
+// Decorators
+builder.Services.Decorate(typeof(IRepository<>), typeof(RepositoryLoggingDecorator<>));
+builder.Services.Decorate<IOrderService, OrderServiceLoggingDecorator>();
 
 var app = builder.Build();
 

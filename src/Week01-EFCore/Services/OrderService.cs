@@ -1,23 +1,36 @@
 ﻿using Week01_EFCore.DTOs;
 using Week01_EFCore.Entities;
+using Week01_EFCore.Enums;
 using Week01_EFCore.Factories;
 using Week01_EFCore.Interfaces;
+using Week01_EFCore.Strategies;
 
 namespace Week01_EFCore.Services
 {
-    public class OrderService : IOrderService<Order>
+    public class OrderService : IOrderService
     {
         private readonly OrderFactory _orderFactory;
         private readonly IRepository<Product> _productRepository;
         private readonly IRepository<Coupon> _couponRepository;
         private readonly IRepository<Order> _orderRepository;
+        private readonly IDictionary<DiscountType, IDiscountStrategy> _discountStrategies;
 
-        public OrderService(OrderFactory orderFactory, IRepository<Product> productRepository, IRepository<Coupon> couponRepository, IRepository<Order> orderRepository)
+        public OrderService(
+            OrderFactory orderFactory, 
+            IRepository<Product> productRepository, 
+            IRepository<Coupon> couponRepository, 
+            IRepository<Order> orderRepository,
+            IEnumerable<IDiscountStrategy> discountStrategies)
         {
             _orderFactory = orderFactory;
             _productRepository = productRepository;
             _couponRepository = couponRepository;
             _orderRepository = orderRepository;
+            _discountStrategies = new Dictionary<DiscountType, IDiscountStrategy>
+            {
+                { DiscountType.Fixed, discountStrategies.First(s => s is FixedDiscountStrategy) },
+                { DiscountType.Percentage, discountStrategies.First(s => s is PercentageDiscountStrategy) }
+            };
         }
 
         public async Task<Order> CreateOrderAsync(CreateOrderDTO createOrder)
@@ -55,8 +68,11 @@ namespace Week01_EFCore.Services
             var coupon = await _couponRepository.GetByIdAsync(createOrder.CouponId.Value)
                                 ?? throw new Exception($"Coupon {createOrder.CouponId.Value} not found");
 
+            var strategy = _discountStrategies[coupon.DiscountType];
+            var discount = strategy.CalculateDiscount(order, coupon);
+
             order.CouponId = coupon.Id;
-            order.SubTotal -= coupon.DiscountAmount;
+            order.SubTotal -= discount;
         }
 
         private decimal CalculateItemSubTotal(decimal price, int quantity)

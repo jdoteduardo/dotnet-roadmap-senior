@@ -103,6 +103,7 @@ namespace Week01_EFCore.Context
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.CouponCode).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.DiscountAmount).IsRequired().HasColumnType("decimal(5,2)");
+                entity.Property(e => e.DiscountType).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.IsActive).IsRequired();
 
                 // Many-to-one relationship between Coupon and Order

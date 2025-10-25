@@ -11,7 +11,7 @@ using Week01_EFCore.Context;
 namespace Week01_EFCore.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251015020335_Initial")]
+    [Migration("20251017023756_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -51,6 +51,11 @@ namespace Week01_EFCore.Migrations
 
                     b.Property<decimal>("DiscountAmount")
                         .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("DiscountType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
