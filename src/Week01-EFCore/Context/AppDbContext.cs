@@ -25,7 +25,6 @@ namespace Week01_EFCore.Context
                 var connectionString = configuration.GetConnectionString("DefaultConnection");
 
                 optionsBuilder
-                    .UseLazyLoadingProxies()
                     .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             }
         }

@@ -1,4 +1,5 @@
-﻿using Week01_EFCore.DTOs;
+﻿using AutoMapper;
+using Week01_EFCore.DTOs;
 using Week01_EFCore.Entities;
 using Week01_EFCore.Enums;
 using Week01_EFCore.Factories;
@@ -9,18 +10,20 @@ namespace Week01_EFCore.Services
 {
     public class OrderService : IOrderService
     {
-        private readonly OrderFactory _orderFactory;
+        private readonly IEntityFactory<Order> _orderFactory;
         private readonly IRepository<Product> _productRepository;
         private readonly IRepository<Coupon> _couponRepository;
         private readonly IRepository<Order> _orderRepository;
         private readonly IDictionary<DiscountType, IDiscountStrategy> _discountStrategies;
+        private readonly IMapper _mapper;
 
         public OrderService(
-            OrderFactory orderFactory, 
+            IEntityFactory<Order> orderFactory,
             IRepository<Product> productRepository, 
             IRepository<Coupon> couponRepository, 
             IRepository<Order> orderRepository,
-            IEnumerable<IDiscountStrategy> discountStrategies)
+            IEnumerable<IDiscountStrategy> discountStrategies,
+            IMapper mapper)
         {
             _orderFactory = orderFactory;
             _productRepository = productRepository;
@@ -31,9 +34,10 @@ namespace Week01_EFCore.Services
                 { DiscountType.Fixed, discountStrategies.First(s => s is FixedDiscountStrategy) },
                 { DiscountType.Percentage, discountStrategies.First(s => s is PercentageDiscountStrategy) }
             };
+            _mapper = mapper;
         }
 
-        public async Task<Order> CreateOrderAsync(CreateOrderDTO createOrder)
+        public async Task<OrderDTO> CreateOrderAsync(CreateOrderDTO createOrder)
         {
             var order = _orderFactory.Create();
 
@@ -60,7 +64,7 @@ namespace Week01_EFCore.Services
 
             await _orderRepository.AddAsync(order);
 
-            return order;
+            return _mapper.Map<OrderDTO>(order);
         }
 
         private async Task ApplyCoupon(CreateOrderDTO createOrder, Order order)

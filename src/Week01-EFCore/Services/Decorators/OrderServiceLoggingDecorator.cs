@@ -15,7 +15,7 @@ namespace Week01_EFCore.Services.Decorators
             _logger = logger;
         }
 
-        public async Task<Order> CreateOrderAsync(CreateOrderDTO createOrder)
+        public async Task<OrderDTO> CreateOrderAsync(CreateOrderDTO createOrder)
         {
             await _logger.LogInformationAsync($"Iniciando criação de pedido com {createOrder.Items.Count} items");
             

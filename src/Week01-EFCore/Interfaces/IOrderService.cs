@@ -5,6 +5,6 @@ namespace Week01_EFCore.Interfaces
 {
     public interface IOrderService
     {
-        Task<Order> CreateOrderAsync(CreateOrderDTO createOrder);
+        Task<OrderDTO> CreateOrderAsync(CreateOrderDTO createOrder);
     }
 }
