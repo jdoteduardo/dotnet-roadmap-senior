@@ -37,6 +37,13 @@ namespace Week01_EFCore.Services
             _mapper = mapper;
         }
 
+        public async Task<OrderDTO?> GetOrderById(int id)
+        {
+            var order = await _orderRepository.GetByIdAsync(id);
+
+            return _mapper.Map<OrderDTO?>(order);
+        }
+
         public async Task<OrderDTO> CreateOrderAsync(CreateOrderDTO createOrder)
         {
             var order = _orderFactory.Create();

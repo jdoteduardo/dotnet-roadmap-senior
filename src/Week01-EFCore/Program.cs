@@ -1,8 +1,11 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using Week01_EFCore.Configs;
 using Week01_EFCore.Context;
 using Week01_EFCore.Entities;
 using Week01_EFCore.Factories;
+using Week01_EFCore.Filters;
 using Week01_EFCore.Interfaces;
 using Week01_EFCore.Repository;
 using Week01_EFCore.Repository.Decorators;
@@ -15,7 +18,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationExceptionFilter>();
+});
+
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

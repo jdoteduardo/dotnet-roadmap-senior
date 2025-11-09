@@ -31,5 +31,20 @@ namespace Week01_EFCore.Services.Decorators
                 throw;
             }
         }
+
+        public async Task<OrderDTO?> GetOrderById(int id)
+        {
+            var order = await _orderService.GetOrderById(id);
+            if (order != null)
+            {
+                await _logger.LogInformationAsync($"Pedido {id} recuperado com sucesso.");
+            }
+            else
+            {
+                await _logger.LogWarningAsync($"Pedido {id} não encontrado.");
+            }
+
+            return order;
+        }
     }
 }
