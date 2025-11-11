@@ -1,8 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Week01_EFCore.DTOs;
+using Week01_EFCore.Features.Categories.Commands.CreateCategory;
+using Week01_EFCore.Features.Categories.Commands.DeleteCategory;
+using Week01_EFCore.Features.Categories.Commands.UpdateCategory;
+using Week01_EFCore.Features.Categories.Queries;
 using Week01_EFCore.Interfaces;
 using Week01_EFCore.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Week01_EFCore.Controllers
 {
@@ -11,10 +17,14 @@ namespace Week01_EFCore.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-        public CategoryController(ICategoryService categoryService)
+        private readonly IMediator _mediator;
+
+        public CategoryController(ICategoryService categoryService, IMediator mediator)
         {
             _categoryService = categoryService;
+            _mediator = mediator;
         }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetAll()
         {
@@ -25,7 +35,7 @@ namespace Week01_EFCore.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryDTO?>> GetById(int id)
         {
-            var category = await _categoryService.GetCategoryByIdAsync(id);
+            var category = await _mediator.Send(new GetCategoryByIdQuery { Id = id });
 
             if (category == null)
             {
@@ -36,28 +46,28 @@ namespace Week01_EFCore.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CategoryDTO>> Create(CategoryDTO categoryDTO)
+        public async Task<ActionResult<CategoryDTO>> Create(CreateCategoryCommand command)
         {
-            var createdCategory = await _categoryService.CreateCategoryAsync(categoryDTO);
+            var createdCategory = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetById), new { id = createdCategory.Id }, createdCategory);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CategoryDTO>> Update(int id, CategoryDTO categoryDTO)
+        public async Task<ActionResult<CategoryDTO>> Update(int id, UpdateCategoryCommand command)
         {
-            if (id != categoryDTO.Id)
+            if (id != command.Id)
             {
-                return BadRequest();
+                return BadRequest(new { Message = "The URL ID does not match the command ID." });
             }
 
-            var updatedCategory = await _categoryService.UpdateCategoryAsync(categoryDTO);
+            var updatedCategory = await _mediator.Send(command);
             return Ok(updatedCategory);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var deleted = await _categoryService.DeleteCategoryAsync(id);
+            var deleted = await _mediator.Send(new DeleteCategoryCommand { Id = id });
 
             if (!deleted)
             {

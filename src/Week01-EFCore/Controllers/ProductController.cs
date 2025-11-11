@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Week01_EFCore.DTOs;
+using Week01_EFCore.Features.Categories.Commands.CreateCategory;
 using Week01_EFCore.Features.Products.Commands.CreateProduct;
 using Week01_EFCore.Features.Products.Commands.DeleteProduct;
 using Week01_EFCore.Features.Products.Commands.UpdateProduct;
