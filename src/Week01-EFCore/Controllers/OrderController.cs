@@ -1,25 +1,26 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ECommerce.OrderManagement.Application.DTOs;
+using ECommerce.OrderManagement.Application.Features.Orders.Commands.CreateOrder;
+using ECommerce.OrderManagement.Application.Features.Orders.Queries.GetOrderById;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Week01_EFCore.DTOs;
-using Week01_EFCore.Interfaces;
-using Week01_EFCore.Services;
 
-namespace Week01_EFCore.Controllers
+namespace ECommerce.OrderManagement.API.Controllers
 {
     [Route("api/v1/orders")]
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IOrderService _orderService;
-        public OrderController(IOrderService orderService)
+        private readonly IMediator _mediator;
+
+        public OrderController(IMediator mediator)
         {
-            _orderService = orderService;
+            _mediator = mediator;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductDTO?>> GetById(int id)
+        public async Task<ActionResult<OrderDTO?>> GetById(int id)
         {
-            var order = await _orderService.GetOrderById(id);
+            var order = await _mediator.Send(new GetOrderByIdQuery { Id = id });
 
             if (order == null)
             {
@@ -30,9 +31,9 @@ namespace Week01_EFCore.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<OrderDTO>> CreateOrder(CreateOrderDTO createOrder)
+        public async Task<ActionResult<OrderDTO>> CreateOrder(CreateOrderCommand command)
         {
-            var createdOrder = await _orderService.CreateOrderAsync(createOrder);
+            var createdOrder = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetById), new { id = createdOrder.Id }, createdOrder);
         }
     }

@@ -33,8 +33,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\Week01-EFCore\\Week01-EFCore.csproj": {
-                "projectPath": "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\Week01-EFCore\\Week01-EFCore.csproj"
+              "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\Week01-EFCore\\ECommerce.OrderManagement.API.csproj": {
+                "projectPath": "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\Week01-EFCore\\ECommerce.OrderManagement.API.csproj"
               }
             }
           }
@@ -108,12 +108,12 @@
         }
       }
     },
-    "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\Week01-EFCore\\Week01-EFCore.csproj": {
+    "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\Week01-EFCore\\ECommerce.OrderManagement.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\Week01-EFCore\\Week01-EFCore.csproj",
-        "projectName": "Week01-EFCore",
-        "projectPath": "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\Week01-EFCore\\Week01-EFCore.csproj",
+        "projectUniqueName": "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\Week01-EFCore\\ECommerce.OrderManagement.API.csproj",
+        "projectName": "ECommerce.OrderManagement.API",
+        "projectPath": "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\Week01-EFCore\\ECommerce.OrderManagement.API.csproj",
         "packagesPath": "C:\\Users\\zeedu\\.nuget\\packages\\",
         "outputPath": "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\Week01-EFCore\\obj\\",
         "projectStyle": "PackageReference",

@@ -1,28 +1,26 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using ECommerce.OrderManagement.Application.DTOs;
+using ECommerce.OrderManagement.Application.Features.Categories.Commands.CreateCategory;
+using ECommerce.OrderManagement.Application.Features.Categories.Commands.DeleteCategory;
+using ECommerce.OrderManagement.Application.Features.Categories.Commands.UpdateCategory;
+using ECommerce.OrderManagement.Application.Features.Categories.Queries.GetCategoryById;
+using ECommerce.OrderManagement.Application.Features.Categories.Queries.GetAllCategories;
+using ECommerce.OrderManagement.Application.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Week01_EFCore.DTOs;
-using Week01_EFCore.Features.Categories.Commands.CreateCategory;
-using Week01_EFCore.Features.Categories.Commands.DeleteCategory;
-using Week01_EFCore.Features.Categories.Commands.UpdateCategory;
-using Week01_EFCore.Features.Categories.Queries;
-using Week01_EFCore.Interfaces;
-using Week01_EFCore.Services;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace Week01_EFCore.Controllers
+namespace ECommerce.OrderManagement.API.Controllers
 {
     [Route("api/v1/categories")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
         private readonly IMediator _mediator;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(ICategoryService categoryService, IMediator mediator)
+        public CategoryController(IMediator mediator, ICategoryService categoryService)
         {
-            _categoryService = categoryService;
             _mediator = mediator;
+            _categoryService = categoryService;
         }
 
         [HttpGet]

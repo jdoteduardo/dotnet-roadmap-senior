@@ -2,7 +2,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Week01_EFCore.Filters
+namespace ECommerce.OrderManagement.API.Filters
 {
     public class ValidationExceptionFilter : IExceptionFilter
     {

@@ -1,4 +1,4 @@
-namespace Week01_EFCore.Tests
+namespace ECommerce.OrderManagement.API.Tests
 {
     public class UnitTest1
     {

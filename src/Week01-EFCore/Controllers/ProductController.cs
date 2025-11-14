@@ -1,27 +1,26 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Week01_EFCore.DTOs;
-using Week01_EFCore.Features.Categories.Commands.CreateCategory;
-using Week01_EFCore.Features.Products.Commands.CreateProduct;
-using Week01_EFCore.Features.Products.Commands.DeleteProduct;
-using Week01_EFCore.Features.Products.Commands.UpdateProduct;
-using Week01_EFCore.Features.Products.Queries.GetProductById;
-using Week01_EFCore.Interfaces;
+using ECommerce.OrderManagement.Application.DTOs;
+using ECommerce.OrderManagement.Application.Features.Products.Commands.CreateProduct;
+using ECommerce.OrderManagement.Application.Features.Products.Commands.DeleteProduct;
+using ECommerce.OrderManagement.Application.Features.Products.Commands.UpdateProduct;
+using ECommerce.OrderManagement.Application.Features.Products.Queries.GetProductById;
+using ECommerce.OrderManagement.Application.Features.Products.Queries.GetAllProducts;
+using ECommerce.OrderManagement.Application.Interfaces;
 
-namespace Week01_EFCore.Controllers
+namespace ECommerce.OrderManagement.API.Controllers
 {
     [Route("api/v1/products")]
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductService _productService;
         private readonly IMediator _mediator;
+        private readonly IProductService _productService;
 
-        public ProductController(IProductService productService, IMediator mediator)
+        public ProductController(IMediator mediator, IProductService productService)
         {
-            _productService = productService;
             _mediator = mediator;
+            _productService = productService;
         }
 
         [HttpGet]

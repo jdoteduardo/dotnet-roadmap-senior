@@ -1,15 +1,11 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Week01_EFCore.Context;
-using Week01_EFCore.Entities;
-using Week01_EFCore.Repository;
+using ECommerce.OrderManagement.Infrastructure.Persistence.Context;
+using ECommerce.OrderManagement.Infrastructure.Persistence.UnitOfWork;
+using ECommerce.OrderManagement.Infrastructure.Persistence.Repositories;
+using ECommerce.OrderManagement.Domain.Entities;
 
-namespace Week01_EFCore.Tests.Repositories
+namespace ECommerce.OrderManagement.API.Tests.Repositories
 {
     public class ProductRepositoryTests
     {
