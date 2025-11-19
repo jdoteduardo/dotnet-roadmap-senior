@@ -1,6 +1,7 @@
 using AutoMapper;
 using ECommerce.OrderManagement.Application.DTOs;
 using ECommerce.OrderManagement.Domain.Entities;
+using ECommerce.OrderManagement.Domain.ValueObjects;
 
 namespace ECommerce.OrderManagement.Application.Mappings
 {
@@ -12,7 +13,12 @@ namespace ECommerce.OrderManagement.Application.Mappings
             CreateMap<Order, OrderDTO>().ReverseMap();
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
-            CreateMap<Coupon, Coupon>().ReverseMap();
+            CreateMap<Address, AddressDTO>().ReverseMap();
+            CreateMap<Customer, CustomerDTO>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Value));
+
+            CreateMap<CustomerDTO, Customer>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => new Email(src.Email)));
         }
     }
 }

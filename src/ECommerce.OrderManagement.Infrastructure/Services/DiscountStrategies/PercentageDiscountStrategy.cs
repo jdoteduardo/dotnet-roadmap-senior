@@ -7,7 +7,7 @@ namespace ECommerce.OrderManagement.Infrastructure.Services.DiscountStrategies
     {
         public decimal CalculateDiscount(Order order, Coupon coupon)
         {
-            return order.SubTotal * (coupon.DiscountAmount / 100);
+            return order.SubTotal.Value * (coupon.DiscountAmount / 100);
         }
     }
 }

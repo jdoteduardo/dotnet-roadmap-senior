@@ -7,6 +7,7 @@ using ECommerce.OrderManagement.Domain.Enums;
 using ECommerce.OrderManagement.Domain.Factories;
 using ECommerce.OrderManagement.Domain.Repositories;
 using ECommerce.OrderManagement.Domain.Services;
+using ECommerce.OrderManagement.Domain.ValueObjects;
 
 namespace ECommerce.OrderManagement.Application.Features.Orders.Commands.CreateOrder
 {
@@ -19,6 +20,7 @@ namespace ECommerce.OrderManagement.Application.Features.Orders.Commands.CreateO
         private readonly IEnumerable<IDiscountStrategy> _discountStrategies;
         private readonly IMapper _mapper;
         private readonly IValidator<CreateOrderCommand> _validator;
+        private readonly IMediator _mediator;
 
         public CreateOrderCommandHandler(
             IEntityFactory<Order> orderFactory,
@@ -27,7 +29,8 @@ namespace ECommerce.OrderManagement.Application.Features.Orders.Commands.CreateO
             IRepository<Order> orderRepository,
             IEnumerable<IDiscountStrategy> discountStrategies,
             IMapper mapper,
-            IValidator<CreateOrderCommand> validator)
+            IValidator<CreateOrderCommand> validator,
+            IMediator mediator)
         {
             _orderFactory = orderFactory;
             _productRepository = productRepository;
@@ -36,6 +39,7 @@ namespace ECommerce.OrderManagement.Application.Features.Orders.Commands.CreateO
             _discountStrategies = discountStrategies;
             _mapper = mapper;
             _validator = validator;
+            _mediator = mediator;
         }
 
         public async Task<OrderDTO> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -48,6 +52,7 @@ namespace ECommerce.OrderManagement.Application.Features.Orders.Commands.CreateO
             }
 
             var order = _orderFactory.Create();
+            var totalAmount = 0m;
 
             foreach (var item in request.Items)
             {
@@ -61,8 +66,10 @@ namespace ECommerce.OrderManagement.Application.Features.Orders.Commands.CreateO
                 };
 
                 order.OrderItems.Add(orderItem);
-                order.SubTotal += CalculateItemSubTotal(product.Price, item.Quantity);
+                totalAmount += CalculateItemSubTotal(product.Price, item.Quantity);
             }
+
+            order.SubTotal = new Money(totalAmount);
 
             if (request.CouponId.HasValue)
             {
@@ -70,6 +77,16 @@ namespace ECommerce.OrderManagement.Application.Features.Orders.Commands.CreateO
             }
 
             var createdOrder = await _orderRepository.AddAsync(order);
+
+            createdOrder.MarkAsCreated();
+
+            foreach (var domainEvent in createdOrder.DomainEvents)
+            {
+                await _mediator.Publish(domainEvent, cancellationToken);
+            }
+
+            createdOrder.ClearDomainEvents();
+
             return _mapper.Map<OrderDTO>(createdOrder);
         }
 
@@ -85,7 +102,8 @@ namespace ECommerce.OrderManagement.Application.Features.Orders.Commands.CreateO
             var discount = strategy.CalculateDiscount(order, coupon);
 
             order.CouponId = coupon.Id;
-            order.SubTotal -= discount;
+            // Corrigir a subtração também
+            order.SubTotal = new Money(order.SubTotal.Value - discount);
         }
 
         private decimal CalculateItemSubTotal(decimal price, int quantity)

@@ -13,14 +13,19 @@ namespace ECommerce.OrderManagement.Infrastructure.Persistence.Context
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
+                var basePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "ECommerce.OrderManagement.API");
+                
                 var configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.Development.json"))
+                    .SetBasePath(basePath)
+                    .AddJsonFile("appsettings.Development.json", optional: true)
+                    .AddJsonFile("appsettings.json", optional: false)
                     .Build();
 
                 var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -48,14 +53,30 @@ namespace ECommerce.OrderManagement.Infrastructure.Persistence.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Status).IsRequired().HasMaxLength(50);
-                entity.Property(e => e.SubTotal).HasColumnType("decimal(18,2)");
                 entity.Property(e => e.OrderDate).IsRequired();
+
+                entity.OwnsOne(o => o.SubTotal, money =>
+                {
+                    money.Property(m => m.Value)
+                        .HasColumnName("SubTotal")
+                        .HasColumnType("decimal(18,2)");
+                    money.Property(m => m.Currency)
+                        .HasColumnName("Currency")
+                        .HasMaxLength(3)
+                        .IsRequired();
+                });
 
                 entity.HasMany(e => e.OrderItems)
                       .WithOne(oi => oi.Order)
                       .HasForeignKey(oi => oi.OrderId);
 
                 entity.HasOne(e => e.Coupon)
+                      .WithMany(e => e.Orders);
+
+                entity.HasOne(e => e.Address)
+                      .WithMany(e => e.Orders);
+
+                entity.HasOne(e => e.Customer)
                       .WithMany(e => e.Orders);
             });
 
@@ -90,6 +111,7 @@ namespace ECommerce.OrderManagement.Infrastructure.Persistence.Context
                 entity.HasIndex(e => e.Name);
             });
 
+            // Coupon entity configuration 
             modelBuilder.Entity<Coupon>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -101,6 +123,40 @@ namespace ECommerce.OrderManagement.Infrastructure.Persistence.Context
                 entity.HasMany(e => e.Orders)
                       .WithOne(o => o.Coupon)
                       .HasForeignKey(o => o.CouponId);
+            });
+
+            // Address entity configuration
+            modelBuilder.Entity<Address>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Street).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.City).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.State).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.ZipCode).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.Country).IsRequired().HasMaxLength(50);
+
+                entity.HasMany(e => e.Orders)
+                      .WithOne(o => o.Address)
+                      .HasForeignKey(o => o.AddressId);
+            });
+
+            // Customer entity configuration
+            modelBuilder.Entity<Customer>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+
+                entity.OwnsOne(c => c.Email, email =>
+                {
+                    email.Property(e => e.Value)
+                        .HasColumnName("Email")
+                        .HasMaxLength(255)
+                        .IsRequired();
+                });
+
+                entity.HasMany(e => e.Orders)
+                      .WithOne(o => o.Customer)
+                      .HasForeignKey(o => o.CustomerId);
             });
         }
     }

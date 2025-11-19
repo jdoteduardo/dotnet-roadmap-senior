@@ -6,6 +6,7 @@ using ECommerce.OrderManagement.Domain.Enums;
 using ECommerce.OrderManagement.Domain.Factories;
 using ECommerce.OrderManagement.Domain.Repositories;
 using ECommerce.OrderManagement.Domain.Services;
+using ECommerce.OrderManagement.Domain.ValueObjects;
 
 namespace ECommerce.OrderManagement.Application.Services
 {
@@ -43,6 +44,7 @@ namespace ECommerce.OrderManagement.Application.Services
         public async Task<OrderDTO> CreateOrderAsync(CreateOrderDTO createOrder)
         {
             var order = _orderFactory.Create();
+            var totalAmount = 0m;
 
             foreach (var item in createOrder.Items)
             {
@@ -56,8 +58,10 @@ namespace ECommerce.OrderManagement.Application.Services
                 };
 
                 order.OrderItems.Add(orderItem);
-                order.SubTotal += CalculateItemSubTotal(product.Price, item.Quantity);
+                totalAmount += CalculateItemSubTotal(product.Price, item.Quantity);
             }
+
+            order.SubTotal = new Money(totalAmount);
 
             if (createOrder.CouponId.HasValue)
             {
@@ -80,7 +84,7 @@ namespace ECommerce.OrderManagement.Application.Services
             var discount = strategy.CalculateDiscount(order, coupon);
 
             order.CouponId = coupon.Id;
-            order.SubTotal -= discount;
+            order.SubTotal = new Money(order.SubTotal.Value - discount);
         }
 
         private decimal CalculateItemSubTotal(decimal price, int quantity)

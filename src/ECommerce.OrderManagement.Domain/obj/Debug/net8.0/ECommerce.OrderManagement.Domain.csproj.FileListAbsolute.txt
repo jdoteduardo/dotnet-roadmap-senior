@@ -1,6 +1,7 @@
 C:\CursoWebApi\dotnet-roadmap-senior\src\ECommerce.OrderManagement.Domain\bin\Debug\net8.0\ECommerce.OrderManagement.Domain.deps.json
 C:\CursoWebApi\dotnet-roadmap-senior\src\ECommerce.OrderManagement.Domain\bin\Debug\net8.0\ECommerce.OrderManagement.Domain.dll
 C:\CursoWebApi\dotnet-roadmap-senior\src\ECommerce.OrderManagement.Domain\bin\Debug\net8.0\ECommerce.OrderManagement.Domain.pdb
+C:\CursoWebApi\dotnet-roadmap-senior\src\ECommerce.OrderManagement.Domain\obj\Debug\net8.0\ECommerce.OrderManagement.Domain.csproj.AssemblyReference.cache
 C:\CursoWebApi\dotnet-roadmap-senior\src\ECommerce.OrderManagement.Domain\obj\Debug\net8.0\ECommerce.OrderManagement.Domain.GeneratedMSBuildEditorConfig.editorconfig
 C:\CursoWebApi\dotnet-roadmap-senior\src\ECommerce.OrderManagement.Domain\obj\Debug\net8.0\ECommerce.OrderManagement.Domain.AssemblyInfoInputs.cache
 C:\CursoWebApi\dotnet-roadmap-senior\src\ECommerce.OrderManagement.Domain\obj\Debug\net8.0\ECommerce.OrderManagement.Domain.AssemblyInfo.cs

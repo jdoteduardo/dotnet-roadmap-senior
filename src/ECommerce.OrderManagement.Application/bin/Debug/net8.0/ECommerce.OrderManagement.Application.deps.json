@@ -171,6 +171,9 @@
       },
       "System.Runtime.CompilerServices.Unsafe/6.0.0": {},
       "ECommerce.OrderManagement.Domain/1.0.0": {
+        "dependencies": {
+          "MediatR": "13.1.0"
+        },
         "runtime": {
           "ECommerce.OrderManagement.Domain.dll": {
             "assemblyVersion": "1.0.0.0",

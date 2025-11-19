@@ -1,4 +1,5 @@
 ﻿using ECommerce.OrderManagement.Domain.Entities;
+using ECommerce.OrderManagement.Domain.ValueObjects;
 
 namespace ECommerce.OrderManagement.Domain.Factories
 {
@@ -10,7 +11,7 @@ namespace ECommerce.OrderManagement.Domain.Factories
             {
                 OrderDate = DateTime.Now,
                 Status = string.Empty,
-                SubTotal = 0m,
+                SubTotal = new Money(0m),
                 OrderItems = new List<OrderItem>()
             };
         }
