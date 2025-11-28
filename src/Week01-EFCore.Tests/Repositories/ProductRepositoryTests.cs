@@ -5,7 +5,7 @@ using ECommerce.OrderManagement.Infrastructure.Persistence.UnitOfWork;
 using ECommerce.OrderManagement.Infrastructure.Persistence.Repositories;
 using ECommerce.OrderManagement.Domain.Entities;
 
-namespace ECommerce.OrderManagement.API.Tests.Repositories
+namespace ECommerce.OrderManagement.Tests.Repositories
 {
     public class ProductRepositoryTests
     {
@@ -20,7 +20,6 @@ namespace ECommerce.OrderManagement.API.Tests.Repositories
             _options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseSqlite(_connection)
                 .Options;
-
 
             using var context = new AppDbContext(_options);
             context.Database.EnsureCreated();

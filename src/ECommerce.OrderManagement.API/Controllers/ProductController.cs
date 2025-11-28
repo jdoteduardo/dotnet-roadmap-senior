@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using ECommerce.OrderManagement.Application.DTOs;
 using ECommerce.OrderManagement.Application.Features.Products.Commands.CreateProduct;
 using ECommerce.OrderManagement.Application.Features.Products.Commands.DeleteProduct;
@@ -12,6 +13,7 @@ namespace ECommerce.OrderManagement.API.Controllers
 {
     [Route("api/v1/products")]
     [ApiController]
+    [EnableRateLimiting("PublicReadByIp")] // aplica por padrão ao controller (GETs)
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -24,10 +26,15 @@ namespace ECommerce.OrderManagement.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAll()
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var products = await _productService.GetAllProductsAsync();
-            return Ok(products);
+            var paged = await _productService.GetAllProductsAsync(pageNumber, pageSize);
+
+            Response.Headers["X-Total-Count"] = paged.TotalCount.ToString();
+            Response.Headers["X-Page-Number"] = paged.PageNumber.ToString();
+            Response.Headers["X-Page-Size"] = paged.PageSize.ToString();
+
+            return Ok(paged.Items);
         }
 
         [HttpGet("{id}")]
@@ -44,6 +51,7 @@ namespace ECommerce.OrderManagement.API.Controllers
         }
 
         [HttpPost]
+        [EnableRateLimiting("PerIpWrite")] // escrita mais restrita
         public async Task<ActionResult<ProductDTO>> Create(CreateProductCommand command)
         {
             var createdProduct = await _mediator.Send(command);
@@ -51,6 +59,7 @@ namespace ECommerce.OrderManagement.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [EnableRateLimiting("PerIpWrite")]
         public async Task<ActionResult<ProductDTO>> Update(int id, UpdateProductCommand command)
         {
             if (id != command.Id)
@@ -63,6 +72,7 @@ namespace ECommerce.OrderManagement.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [EnableRateLimiting("PerIpWrite")]
         public async Task<ActionResult> Delete(int id)
         {
             var deleted = await _mediator.Send(new DeleteProductCommand { Id = id });

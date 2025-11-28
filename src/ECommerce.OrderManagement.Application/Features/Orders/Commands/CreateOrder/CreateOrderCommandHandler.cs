@@ -70,6 +70,9 @@ namespace ECommerce.OrderManagement.Application.Features.Orders.Commands.CreateO
             }
 
             order.SubTotal = new Money(totalAmount);
+            order.CustomerId = request.CustomerId;
+            order.AddressId = request.AddressId;
+            order.CouponId = request.CouponId;
 
             if (request.CouponId.HasValue)
             {

@@ -1,0 +1,6 @@
+{
+  "ECommerce.OrderManagement.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\ECommerce.OrderManagement.API",
+  "ECommerce.OrderManagement.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\ECommerce.OrderManagement.Application",
+  "ECommerce.OrderManagement.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\ECommerce.OrderManagement.Domain",
+  "ECommerce.OrderManagement.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\ECommerce.OrderManagement.Infrastructure"
+}

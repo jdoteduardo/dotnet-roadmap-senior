@@ -4,7 +4,7 @@ namespace ECommerce.OrderManagement.Application.Interfaces
 {
     public interface IProductService
     {
-        Task<IEnumerable<ProductDTO>> GetAllProductsAsync();
+        Task<PagedResult<ProductDTO>> GetAllProductsAsync(int pageNumber = 1, int pageSize = 10);
         Task<ProductDTO?> GetProductByIdAsync(int id);
         Task<ProductDTO> CreateProductAsync(string name, int categoryId, decimal price);
         Task<ProductDTO> UpdateProductAsync(int id, string name, int categoryId, decimal price);

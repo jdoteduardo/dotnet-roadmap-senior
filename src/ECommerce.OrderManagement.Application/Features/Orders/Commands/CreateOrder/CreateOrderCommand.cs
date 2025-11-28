@@ -7,7 +7,7 @@ namespace ECommerce.OrderManagement.Application.Features.Orders.Commands.CreateO
     {
         public List<OrderItemCommand> Items { get; set; } = new();
         public int? CouponId { get; set; }
-        public int? CustomerId { get; set; }
-        public int? AddressId { get; set; }
+        public int CustomerId { get; set; }
+        public int AddressId { get; set; }
     }
 }

@@ -19,6 +19,12 @@ namespace ECommerce.OrderManagement.Application.Mappings
 
             CreateMap<CustomerDTO, Customer>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => new Email(src.Email)));
+
+            CreateMap<Order, OrderDTO>()
+                .ForMember(dest => dest.SubTotal, opt => opt.MapFrom(src => src.SubTotal.Value));
+
+            CreateMap<OrderDTO, Order>()
+                .ForMember(dest => dest.SubTotal, opt => opt.MapFrom(src => new Money(src.SubTotal)));
         }
     }
 }

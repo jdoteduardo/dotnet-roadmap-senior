@@ -7,12 +7,20 @@ namespace ECommerce.OrderManagement.Application.Features.Orders.Commands.CreateO
     public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
     {
         private readonly IRepository<Product> _productRepository;
+        private readonly IRepository<Customer> _customerRepository;
+        private readonly IRepository<Address> _addressRepository;
         private readonly IRepository<Coupon> _couponRepository;
 
-        public CreateOrderCommandValidator(IRepository<Product> productRepository, IRepository<Coupon> couponRepository)
+        public CreateOrderCommandValidator(
+            IRepository<Product> productRepository, 
+            IRepository<Customer> customerRepository,
+            IRepository<Address> addressRepository,
+            IRepository<Coupon> couponRepository)
         {
             _productRepository = productRepository;
             _couponRepository = couponRepository;
+            _addressRepository = addressRepository;
+            _customerRepository = customerRepository;
 
             RuleFor(x => x.Items)
                 .NotEmpty().WithMessage("O pedido deve conter pelo menos um item.");
@@ -30,6 +38,28 @@ namespace ECommerce.OrderManagement.Application.Features.Orders.Commands.CreateO
             RuleFor(x => x.CouponId)
                 .MustAsync(CouponExistsIfProvided).WithMessage("Cupom não encontrado.")
                 .When(x => x.CouponId.HasValue);
+
+            RuleFor(x => x.CustomerId)
+                .GreaterThan(0).WithMessage("CustomerId inválido.")
+                .MustAsync(CustomerExists).WithMessage("Cliente não encontrado.");
+
+            RuleFor(x => x.AddressId)
+                .GreaterThan(0).WithMessage("AddressId inválido.")
+                .MustAsync(AddressExists).WithMessage("Endereço não encontrado.");
+        }
+
+        private async Task<bool> CustomerExists(int customerId, CancellationToken token)
+        {
+            var customer = await _customerRepository.GetByIdAsync(customerId);
+
+            return customer != null;
+        }
+
+        private async Task<bool> AddressExists(int addressId, CancellationToken token)
+        {
+            var address = await _addressRepository.GetByIdAsync(addressId);
+
+            return address != null;
         }
 
         private async Task<bool> ProductExists(int productId, CancellationToken cancellationToken)

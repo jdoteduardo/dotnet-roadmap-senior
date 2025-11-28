@@ -12,7 +12,7 @@ namespace ECommerce.OrderManagement.Domain.Entities
         public string Status { get; set; }
         public Money SubTotal { get; set; }
         public int? CouponId { get; set; }
-        public int? AddressId { get; set; }
+        public int AddressId { get; set; }
         public int CustomerId { get; set; }
         public Coupon? Coupon { get; set; }
         public Address? Address { get; set; }
