@@ -467,3 +467,4 @@ C:\CursoWebApi\dotnet-roadmap-senior\src\Week01-EFCore.Tests\bin\Debug\net8.0\Mi
 C:\CursoWebApi\dotnet-roadmap-senior\src\Week01-EFCore.Tests\bin\Debug\net8.0\ECommerce.OrderManagement.API.dll
 C:\CursoWebApi\dotnet-roadmap-senior\src\Week01-EFCore.Tests\bin\Debug\net8.0\ECommerce.OrderManagement.API.pdb
 C:\CursoWebApi\dotnet-roadmap-senior\src\Week01-EFCore.Tests\obj\Debug\net8.0\MvcTestingAppManifest.json
+C:\CursoWebApi\dotnet-roadmap-senior\src\Week01-EFCore.Tests\bin\Debug\net8.0\Moq.dll

@@ -13,8 +13,7 @@ namespace ECommerce.OrderManagement.Application.Features.Orders.Queries.GetOrder
             _orderRepository = orderRepository;
 
             RuleFor(x => x.Id)
-                .GreaterThan(0).WithMessage("Pedido inválido.")
-                .MustAsync(OrderExists).WithMessage("Pedido não encontrado.");
+                .GreaterThan(0).WithMessage("Pedido inválido.");
         }
 
         private async Task<bool> OrderExists(int id, CancellationToken cancellationToken)

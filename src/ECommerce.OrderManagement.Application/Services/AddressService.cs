@@ -42,11 +42,11 @@ namespace ECommerce.OrderManagement.Application.Services
             return _mapper.Map<AddressDTO>(createdAddress);
         }
 
-        public Task<AddressDTO> UpdateAddressAsync(AddressDTO addressDTO)
+        public async Task<AddressDTO> UpdateAddressAsync(AddressDTO addressDTO)
         {
             var address = _mapper.Map<Address>(addressDTO);
-            var createdAddress =  _addressRepository.UpdateAsync(address);
-            return _mapper.Map<Task<AddressDTO>>(createdAddress);
+            var updatedAddress = await _addressRepository.UpdateAsync(address);
+            return _mapper.Map<AddressDTO>(updatedAddress);
         }
 
         public async Task<bool> DeleteAddressAsync(int id)

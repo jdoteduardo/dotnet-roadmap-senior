@@ -41,7 +41,7 @@ namespace ECommerce.OrderManagement.API.Controllers
         public async Task<IActionResult> CreateCustomer([FromBody] CustomerDTO customerDTO)
         {
             var createdCustomer = await _customerService.CreateCustomerAsync(customerDTO);
-            return CreatedAtAction(nameof(GetCustomerById), new { id = customerDTO.Id }, customerDTO);
+            return CreatedAtAction(nameof(GetCustomerById), new { id = createdCustomer.Id }, createdCustomer);
         }
 
         [HttpPut("{id}")]

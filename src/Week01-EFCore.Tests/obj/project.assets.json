@@ -1368,6 +1368,18 @@
           }
         }
       },
+      "Moq/4.20.72": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "5.1.1"
+        },
+        "compile": {
+          "lib/net6.0/Moq.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Moq.dll": {}
+        }
+      },
       "MySqlConnector/2.3.5": {
         "type": "package",
         "dependencies": {
@@ -5212,6 +5224,23 @@
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
+      ]
+    },
+    "Moq/4.20.72": {
+      "sha512": "EA55cjyNn8eTNWrgrdZJH5QLFp2L43oxl1tlkoYUKIE9pRwL784OWiTXeCV5ApS+AMYEAlt7Fo03A2XfouvHmQ==",
+      "type": "package",
+      "path": "moq/4.20.72",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "icon.png",
+        "lib/net462/Moq.dll",
+        "lib/net6.0/Moq.dll",
+        "lib/netstandard2.0/Moq.dll",
+        "lib/netstandard2.1/Moq.dll",
+        "moq.4.20.72.nupkg.sha512",
+        "moq.nuspec",
+        "readme.md"
       ]
     },
     "MySqlConnector/2.3.5": {
@@ -9084,12 +9113,14 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "ECommerce.OrderManagement.API >= 1.0.0",
+      "ECommerce.OrderManagement.Domain >= 1.0.0",
       "Microsoft.AspNetCore.Mvc.Testing >= 8.0.0",
       "Microsoft.Data.Sqlite.Core >= 8.0.0",
       "Microsoft.EntityFrameworkCore >= 8.0.0",
       "Microsoft.EntityFrameworkCore.InMemory >= 8.0.0",
       "Microsoft.EntityFrameworkCore.Sqlite >= 8.0.0",
       "Microsoft.NET.Test.Sdk >= 17.8.0",
+      "Moq >= 4.20.72",
       "coverlet.collector >= 6.0.0",
       "xunit >= 2.5.3",
       "xunit.runner.visualstudio >= 2.5.3"
@@ -9131,6 +9162,9 @@
           "projectReferences": {
             "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\ECommerce.OrderManagement.API\\ECommerce.OrderManagement.API.csproj": {
               "projectPath": "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\ECommerce.OrderManagement.API\\ECommerce.OrderManagement.API.csproj"
+            },
+            "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\ECommerce.OrderManagement.Domain\\ECommerce.OrderManagement.Domain.csproj": {
+              "projectPath": "C:\\CursoWebApi\\dotnet-roadmap-senior\\src\\ECommerce.OrderManagement.Domain\\ECommerce.OrderManagement.Domain.csproj"
             }
           }
         }
@@ -9174,6 +9208,10 @@
           "Microsoft.NET.Test.Sdk": {
             "target": "Package",
             "version": "[17.8.0, )"
+          },
+          "Moq": {
+            "target": "Package",
+            "version": "[4.20.72, )"
           },
           "coverlet.collector": {
             "target": "Package",

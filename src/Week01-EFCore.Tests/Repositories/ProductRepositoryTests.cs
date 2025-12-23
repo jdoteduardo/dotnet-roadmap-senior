@@ -1,42 +1,17 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using ECommerce.OrderManagement.Infrastructure.Persistence.Context;
-using ECommerce.OrderManagement.Infrastructure.Persistence.UnitOfWork;
-using ECommerce.OrderManagement.Infrastructure.Persistence.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
 using ECommerce.OrderManagement.Domain.Entities;
+using ECommerce.OrderManagement.API.Tests.Repositories;
 
 namespace ECommerce.OrderManagement.Tests.Repositories
 {
-    public class ProductRepositoryTests
+    public class ProductRepositoryTests : BaseRepositoryTest
     {
-        private readonly SqliteConnection _connection;
-        private readonly DbContextOptions<AppDbContext> _options;
-
-        public ProductRepositoryTests()
-        {
-            _connection = new SqliteConnection("DataSource=:memory:");
-            _connection.Open();
-
-            _options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseSqlite(_connection)
-                .Options;
-
-            using var context = new AppDbContext(_options);
-            context.Database.EnsureCreated();
-        }
-
-        public void Dispose()
-        {
-            _connection.Dispose();
-        }
-
         [Fact]
         public async Task AddProductWithoutCategory_ShouldThrowException()
         {
             // Arrange
-            using var context = new AppDbContext(_options);
-            var uow = new UnitOfWork(context);
-            var repository = new Repository<Product>(context, uow);
+            using var context = CreateContext();
+            var repository = CreateRepository<Product>(context);
             var product = new Product { Name = "Test Product", CategoryId = 999 };
 
             // Act & Assert
@@ -47,10 +22,9 @@ namespace ECommerce.OrderManagement.Tests.Repositories
         public async Task AddProductWithCategoryExists_ShouldAddProductToDatabase()
         {
             // Arrange
-            using var context = new AppDbContext(_options);
-            var uow = new UnitOfWork(context);
-            var repositoryCategory = new Repository<Category>(context, uow);
-            var repositoryProduct = new Repository<Product>(context, uow);
+            using var context = CreateContext();
+            var repositoryCategory = CreateRepository<Category>(context);
+            var repositoryProduct = CreateRepository<Product>(context);
             var category = new Category { Name = "Test Category" };
             await repositoryCategory.AddAsync(category);
             var product = new Product { Name = "Test Product", CategoryId = category.Id };
@@ -68,10 +42,9 @@ namespace ECommerce.OrderManagement.Tests.Repositories
         public async Task GetAllProducts_ShouldReturnAllProducts()
         {
             // Arrange
-            using var context = new AppDbContext(_options);
-            var uow = new UnitOfWork(context);
-            var repositoryCategory = new Repository<Category>(context, uow);
-            var repositoryProduct = new Repository<Product>(context, uow);
+            using var context = CreateContext();
+            var repositoryCategory = CreateRepository<Category>(context);
+            var repositoryProduct = CreateRepository<Product>(context);
             var category = new Category { Name = "Test Category" };
             await repositoryCategory.AddAsync(category);
             var product1 = new Product { Name = "Test Product 1", CategoryId = category.Id };
@@ -90,10 +63,9 @@ namespace ECommerce.OrderManagement.Tests.Repositories
         public async Task GetById_ShouldReturnProduct_WhenExists()
         {
             // Arrange
-            using var context = new AppDbContext(_options);
-            var uow = new UnitOfWork(context);
-            var repositoryCategory = new Repository<Category>(context, uow);
-            var repositoryProduct = new Repository<Product>(context, uow);
+            using var context = CreateContext();
+            var repositoryCategory = CreateRepository<Category>(context);
+            var repositoryProduct = CreateRepository<Product>(context);
             var category = new Category { Name = "Test Category" };
             await repositoryCategory.AddAsync(category);
             var product = new Product { Name = "Test Product 1", CategoryId = category.Id };
@@ -112,9 +84,8 @@ namespace ECommerce.OrderManagement.Tests.Repositories
         {
             // Arrange
             var productId = 999;
-            using var context = new AppDbContext(_options);
-            var uow = new UnitOfWork(context);
-            var repositoryProduct = new Repository<Product>(context, uow);
+            using var context = CreateContext();
+            var repositoryProduct = CreateRepository<Product>(context);
 
             // Act
             var result = await repositoryProduct.GetByIdAsync(productId);
@@ -127,10 +98,9 @@ namespace ECommerce.OrderManagement.Tests.Repositories
         public async Task UpdateProduct_ShouldModifyExistingProduct()
         {
             // Arrange
-            using var context = new AppDbContext(_options);
-            var uow = new UnitOfWork(context);
-            var repositoryCategory = new Repository<Category>(context, uow);
-            var repositoryProduct = new Repository<Product>(context, uow);
+            using var context = CreateContext();
+            var repositoryCategory = CreateRepository<Category>(context);
+            var repositoryProduct = CreateRepository<Product>(context);
             var category = new Category { Name = "Test Category" };
             await repositoryCategory.AddAsync(category);
             var product = new Product { Name = "Test Product", CategoryId = category.Id };
@@ -150,10 +120,9 @@ namespace ECommerce.OrderManagement.Tests.Repositories
         public async Task DeleteProduct_ShouldRemoveProduct_WhenExists()
         {
             // Arrange
-            using var context = new AppDbContext(_options);
-            var uow = new UnitOfWork(context);
-            var repositoryCategory = new Repository<Category>(context, uow);
-            var repositoryProduct = new Repository<Product>(context, uow);
+            using var context = CreateContext();
+            var repositoryCategory = CreateRepository<Category>(context);
+            var repositoryProduct = CreateRepository<Product>(context);
             var category = new Category { Name = "Test Category" };
             await repositoryCategory.AddAsync(category);
             var product = new Product { Name = "Test Product", CategoryId = category.Id };
