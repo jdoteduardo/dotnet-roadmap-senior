@@ -13,10 +13,10 @@ namespace ECommerce.OrderManagement.Domain.Entities
         public Money SubTotal { get; set; }
         public int? CouponId { get; set; }
         public int AddressId { get; set; }
-        public int CustomerId { get; set; }
+        public int UserId { get; set; }
         public Coupon? Coupon { get; set; }
         public Address? Address { get; set; }
-        public Customer? Customer { get; set; }
+        public User? User { get; set; }
         public ICollection<OrderItem>? OrderItems { get; set; }
 
         public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
@@ -34,13 +34,13 @@ namespace ECommerce.OrderManagement.Domain.Entities
         public void MarkAsCreated()
         {
             Status = "Created";
-            AddDomainEvent(new OrderCreatedEvent(Id, CustomerId, SubTotal.Value));
+            AddDomainEvent(new OrderCreatedEvent(Id, UserId, SubTotal.Value));
         }
 
         public void MarkAsPaid()
         {
             Status = "Paid";
-            AddDomainEvent(new OrderPaidEvent(Id, CustomerId, SubTotal.Value));
+            AddDomainEvent(new OrderPaidEvent(Id, UserId, SubTotal.Value));
         }
     }
 }

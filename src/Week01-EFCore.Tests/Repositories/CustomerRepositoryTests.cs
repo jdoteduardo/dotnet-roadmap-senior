@@ -11,8 +11,8 @@ namespace ECommerce.OrderManagement.Tests.Repositories
         {
             // Arrange
             using var context = CreateContext();
-            var repository = CreateRepository<Customer>(context);
-            var customer = new Customer 
+            var repository = CreateRepository<User>(context);
+            var customer = new User 
             { 
                 Name = "João Silva",
                 Email = new Email("joao@teste.com")

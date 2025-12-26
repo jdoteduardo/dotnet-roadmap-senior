@@ -13,7 +13,7 @@ namespace ECommerce.OrderManagement.Infrastructure.Persistence.Context
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
-        public DbSet<Customer> Customers { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Address> Addresses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -76,7 +76,7 @@ namespace ECommerce.OrderManagement.Infrastructure.Persistence.Context
                 entity.HasOne(e => e.Address)
                       .WithMany(e => e.Orders);
 
-                entity.HasOne(e => e.Customer)
+                entity.HasOne(e => e.User)
                       .WithMany(e => e.Orders);
             });
 
@@ -140,11 +140,15 @@ namespace ECommerce.OrderManagement.Infrastructure.Persistence.Context
                       .HasForeignKey(o => o.AddressId);
             });
 
-            // Customer entity configuration
-            modelBuilder.Entity<Customer>(entity =>
+            // User entity configuration
+            modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.PasswordHash).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.Role).IsRequired().HasMaxLength(10);
+                entity.Property(e => e.IsActive).IsRequired();
+                entity.Property(e => e.CreatedAt).IsRequired();
 
                 entity.OwnsOne(c => c.Email, email =>
                 {
@@ -155,8 +159,8 @@ namespace ECommerce.OrderManagement.Infrastructure.Persistence.Context
                 });
 
                 entity.HasMany(e => e.Orders)
-                      .WithOne(o => o.Customer)
-                      .HasForeignKey(o => o.CustomerId);
+                      .WithOne(o => o.User)
+                      .HasForeignKey(o => o.UserId);
             });
         }
     }

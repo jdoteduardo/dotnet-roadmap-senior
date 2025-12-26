@@ -26,7 +26,8 @@ namespace ECommerce.OrderManagement.Application
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IAddressService, AddressService>();
-            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<JwtService>();
 
             return services;
         }

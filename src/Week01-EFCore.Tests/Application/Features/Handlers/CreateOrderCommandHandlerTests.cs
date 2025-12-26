@@ -64,7 +64,7 @@ namespace ECommerce.OrderManagement.API.Tests.Application.Features.Handlers
             var command = new CreateOrderCommand
             {
                 Items = new List<OrderItemCommand> { new() { ProductId = 1, Quantity = 2 } },
-                CustomerId = 1,
+                UserId = 1,
                 AddressId = 1
             };
 
@@ -75,7 +75,7 @@ namespace ECommerce.OrderManagement.API.Tests.Application.Features.Handlers
                 Id = 1,
                 SubTotal = new Money(100m),
                 OrderItems = new List<OrderItem>(),
-                CustomerId = 1,
+                UserId = 1,
                 AddressId = 1
             };
             var expectedOrderDto = new OrderDTO { Id = 1, SubTotal = 100m, CustomerId = 1, AddressId = 1 };
@@ -125,7 +125,7 @@ namespace ECommerce.OrderManagement.API.Tests.Application.Features.Handlers
             {
                 Items = new List<OrderItemCommand> { new() { ProductId = 1, Quantity = 2 } },
                 CouponId = 1,
-                CustomerId = 1,
+                UserId = 1,
                 AddressId = 1
             };
 
@@ -142,7 +142,7 @@ namespace ECommerce.OrderManagement.API.Tests.Application.Features.Handlers
                 Id = 1,
                 SubTotal = new Money(100m),
                 OrderItems = new List<OrderItem>(),
-                CustomerId = 1,
+                UserId = 1,
                 AddressId = 1
             };
             var expectedOrderDto = new OrderDTO { Id = 1, SubTotal = 90m, CouponId = 1 };
@@ -177,7 +177,7 @@ namespace ECommerce.OrderManagement.API.Tests.Application.Features.Handlers
             {
                 Items = new List<OrderItemCommand> { new() { ProductId = 1, Quantity = 2 } },
                 CouponId = 2,
-                CustomerId = 1,
+                UserId = 1,
                 AddressId = 1
             };
 
@@ -194,7 +194,7 @@ namespace ECommerce.OrderManagement.API.Tests.Application.Features.Handlers
                 Id = 1,
                 SubTotal = new Money(100m), // Será alterado pelo handler
                 OrderItems = new List<OrderItem>(),
-                CustomerId = 1,
+                UserId = 1,
                 AddressId = 1
             };
             var expectedOrderDto = new OrderDTO { Id = 1, SubTotal = 90m, CouponId = 2 }; // 100 - (100 * 0.10)
@@ -228,7 +228,7 @@ namespace ECommerce.OrderManagement.API.Tests.Application.Features.Handlers
             var command = new CreateOrderCommand
             {
                 Items = new List<OrderItemCommand> { new() { ProductId = 999, Quantity = 2 } },
-                CustomerId = 1,
+                UserId = 1,
                 AddressId = 1
             };
 

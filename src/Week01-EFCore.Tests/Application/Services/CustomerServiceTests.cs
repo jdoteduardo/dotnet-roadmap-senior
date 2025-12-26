@@ -14,16 +14,16 @@ namespace ECommerce.OrderManagement.API.Tests.Application.Services
 {
     public class CustomerServiceTests
     {
-        private readonly Mock<IRepository<Customer>> _customerRepository;
+        private readonly Mock<IRepository<User>> _customerRepository;
         private readonly Mock<IMapper> _mapper;
-        private readonly CustomerService _customerService;
+        private readonly UserService _customerService;
 
         public CustomerServiceTests()
         {
-            _customerRepository = new Mock<IRepository<Customer>>();
+            _customerRepository = new Mock<IRepository<User>>();
             _mapper = new Mock<IMapper>();
 
-            _customerService = new CustomerService(
+            _customerService = new UserService(
                 _customerRepository.Object,
                 _mapper.Object);
         }
@@ -32,22 +32,22 @@ namespace ECommerce.OrderManagement.API.Tests.Application.Services
         public async Task GetAllCustomersAsync_ShouldReturnCustomers()
         {
             // Arrange
-            var customers = new List<Customer>
+            var customers = new List<User>
             {
-                new Customer { Id = 1, Name = "John Doe" },
-                new Customer { Id = 2, Name = "Jane Smith" }
+                new User { Id = 1, Name = "John Doe" },
+                new User { Id = 2, Name = "Jane Smith" }
             };
             _customerRepository.Setup(repo => repo.GetAllAsync())
                 .ReturnsAsync(customers);
-            _mapper.Setup(m => m.Map<IEnumerable<CustomerDTO>>(It.IsAny<IEnumerable<Customer>>()))
-                .Returns((IEnumerable<Customer> src) => src.Select(c => new CustomerDTO
+            _mapper.Setup(m => m.Map<IEnumerable<UserDTO>>(It.IsAny<IEnumerable<User>>()))
+                .Returns((IEnumerable<User> src) => src.Select(c => new UserDTO
                 {
                     Id = c.Id,
                     Name = c.Name
                 }));
 
             // Act
-            var result = await _customerService.GetAllCustomersAsync();
+            var result = await _customerService.GetAllUsersAsync();
 
             // Assert
             Assert.NotNull(result);

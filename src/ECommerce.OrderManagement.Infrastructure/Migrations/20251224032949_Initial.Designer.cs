@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.OrderManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251118030523_Initial")]
+    [Migration("20251224032949_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -100,35 +100,16 @@ namespace ECommerce.OrderManagement.Infrastructure.Migrations
                     b.ToTable("Coupons");
                 });
 
-            modelBuilder.Entity("ECommerce.OrderManagement.Domain.Entities.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Customers");
-                });
-
             modelBuilder.Entity("ECommerce.OrderManagement.Domain.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("AddressId")
+                    b.Property<int>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<int?>("CouponId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
@@ -139,13 +120,16 @@ namespace ECommerce.OrderManagement.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
 
                     b.HasIndex("CouponId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -197,44 +181,53 @@ namespace ECommerce.OrderManagement.Infrastructure.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("ECommerce.OrderManagement.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("ECommerce.OrderManagement.Domain.Entities.User", b =>
                 {
-                    b.OwnsOne("ECommerce.OrderManagement.Domain.ValueObjects.Email", "Email", b1 =>
-                        {
-                            b1.Property<int>("CustomerId")
-                                .HasColumnType("int");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasMaxLength(255)
-                                .HasColumnType("varchar(255)")
-                                .HasColumnName("Email");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
 
-                            b1.HasKey("CustomerId");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
 
-                            b1.ToTable("Customers");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
-                            b1.WithOwner()
-                                .HasForeignKey("CustomerId");
-                        });
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
 
-                    b.Navigation("Email")
-                        .IsRequired();
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ECommerce.OrderManagement.Domain.Entities.Order", b =>
                 {
                     b.HasOne("ECommerce.OrderManagement.Domain.Entities.Address", "Address")
                         .WithMany("Orders")
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ECommerce.OrderManagement.Domain.Entities.Coupon", "Coupon")
                         .WithMany("Orders")
                         .HasForeignKey("CouponId");
 
-                    b.HasOne("ECommerce.OrderManagement.Domain.Entities.Customer", "Customer")
+                    b.HasOne("ECommerce.OrderManagement.Domain.Entities.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -265,10 +258,10 @@ namespace ECommerce.OrderManagement.Infrastructure.Migrations
 
                     b.Navigation("Coupon");
 
-                    b.Navigation("Customer");
-
                     b.Navigation("SubTotal")
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ECommerce.OrderManagement.Domain.Entities.OrderItem", b =>
@@ -301,6 +294,31 @@ namespace ECommerce.OrderManagement.Infrastructure.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("ECommerce.OrderManagement.Domain.Entities.User", b =>
+                {
+                    b.OwnsOne("ECommerce.OrderManagement.Domain.ValueObjects.Email", "Email", b1 =>
+                        {
+                            b1.Property<int>("UserId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(255)
+                                .HasColumnType("varchar(255)")
+                                .HasColumnName("Email");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.Navigation("Email")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ECommerce.OrderManagement.Domain.Entities.Address", b =>
                 {
                     b.Navigation("Orders");
@@ -316,11 +334,6 @@ namespace ECommerce.OrderManagement.Infrastructure.Migrations
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("ECommerce.OrderManagement.Domain.Entities.Customer", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
             modelBuilder.Entity("ECommerce.OrderManagement.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
@@ -329,6 +342,11 @@ namespace ECommerce.OrderManagement.Infrastructure.Migrations
             modelBuilder.Entity("ECommerce.OrderManagement.Domain.Entities.Product", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("ECommerce.OrderManagement.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,10 +14,10 @@ namespace ECommerce.OrderManagement.Application.Mappings
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
             CreateMap<Address, AddressDTO>().ReverseMap();
-            CreateMap<Customer, CustomerDTO>()
+            CreateMap<User, UserDTO>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Value));
 
-            CreateMap<CustomerDTO, Customer>()
+            CreateMap<UserDTO, User>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => new Email(src.Email)));
 
             CreateMap<Order, OrderDTO>()
