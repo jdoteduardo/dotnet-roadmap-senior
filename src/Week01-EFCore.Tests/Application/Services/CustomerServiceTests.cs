@@ -3,6 +3,7 @@ using ECommerce.OrderManagement.Application.DTOs;
 using ECommerce.OrderManagement.Application.Services;
 using ECommerce.OrderManagement.Domain.Entities;
 using ECommerce.OrderManagement.Domain.Repositories;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -23,9 +24,17 @@ namespace ECommerce.OrderManagement.API.Tests.Application.Services
             _customerRepository = new Mock<IRepository<User>>();
             _mapper = new Mock<IMapper>();
 
+            var configMock = new Mock<IConfiguration>();
+            configMock.Setup(c => c["JwtSettings:SecretKey"]).Returns("test-secret-key-for-unit-tests-only-32chars");
+            configMock.Setup(c => c["JwtSettings:RefreshSecretKey"]).Returns("test-refresh-secret-key");
+            configMock.Setup(c => c["JwtSettings:Issuer"]).Returns("TestIssuer");
+            configMock.Setup(c => c["JwtSettings:Audience"]).Returns("TestAudience");
+            var jwtService = new JwtService(configMock.Object);
+
             _customerService = new UserService(
                 _customerRepository.Object,
-                _mapper.Object);
+                _mapper.Object,
+                jwtService);
         }
 
         [Fact]
