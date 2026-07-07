@@ -1,9 +1,13 @@
-using ECommerce.OrderManagement.Domain.Entities;
+﻿using ECommerce.OrderManagement.Domain.Entities;
 using ECommerce.OrderManagement.Domain.Events;
 using ECommerce.OrderManagement.Domain.ValueObjects;
-using Xunit;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ECommerce.OrderManagement.Tests.Domain.Entities
+namespace ECommerce.OrderManagement.API.Tests.Domain.Entities
 {
     public class OrderTests
     {
@@ -14,12 +18,12 @@ namespace ECommerce.OrderManagement.Tests.Domain.Entities
             var order = new Order
             {
                 Id = 1,
-                CustomerId = 100,
+                UserId = 100,
                 SubTotal = new Money(250.00m)
             };
 
             // Act
-            order.MarkAsCreated();
+            order.MarkAsCreated();  
 
             // Assert
             Assert.Equal("Created", order.Status);
@@ -38,7 +42,7 @@ namespace ECommerce.OrderManagement.Tests.Domain.Entities
             var order = new Order
             {
                 Id = 2,
-                CustomerId = 200,
+                UserId = 200,
                 SubTotal = new Money(100.00m),
                 Status = "Created"
             };
@@ -60,7 +64,7 @@ namespace ECommerce.OrderManagement.Tests.Domain.Entities
         public void ClearDomainEvents_ShouldRemoveAllEvents()
         {
             // Arrange
-            var order = new Order { Id = 1, CustomerId = 1, SubTotal = new Money(50m) };
+            var order = new Order { Id = 1, UserId = 1, SubTotal = new Money(50m) };
             order.MarkAsCreated();
             order.MarkAsPaid();
 
